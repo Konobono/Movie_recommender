@@ -27,7 +27,7 @@ users = pd.read_csv(users_path, sep='|', header=None,
                     names=['user_id', 'age', 'gender', 'occupation', 'zip_code'])
 users = users.drop(columns=['zip_code'])
 
-# Kodowanie zmiennych kategorycznych
+# Zmienne kategoryczne użytkowników
 users = pd.get_dummies(users, columns=['gender', 'occupation'])
 
 # Podział danych na treningowe i testowe
@@ -78,7 +78,7 @@ def recommend_user_user(user_id, top_k=5, neighbor_count=20):
         ratings1 = target_vector[common].values
         ratings2 = other_vector[common].values
 
-        if np.std(ratings1) == 0 or np.std(ratings2) == 0:
+        if np.std(ratings1) == 0 or np.std(ratings2) == 0:          # Odchylenie standardowe
             continue
 
         corr = np.corrcoef(ratings1, ratings2)[0, 1]
@@ -135,12 +135,20 @@ def jaccard_similarity(list1, list2):
     union = set1 | set2
     return len(intersection) / len(union) if union else 0.0
 
+def liked_movies(user_id):
+
+    liked = ratings[(ratings['user_id'] == user_id) & (ratings['rating'] >= 4)]
+    liked_with_genres = (liked.merge(movies, on='movie_id')).sort_values('rating', ascending=False)
+    return liked_with_genres[['title', 'rating']]
+
 if __name__ == "__main__":
     try:
         user_id = int(input("Podaj ID użytkownika (1-943): "))
     except ValueError:
         print("Błędne ID użytkownika")
         exit()
+
+    print(liked_movies(user_id))      
 
     print(f"\nTop 5 rekomendacji modelu content-based dla użytkownika numer {user_id}:")
     cb_preds = recommend_content_based(user_id, top_k=5)
