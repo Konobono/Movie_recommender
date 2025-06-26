@@ -5,9 +5,9 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import precision_score
 
 # Ścieżki do danych
-ratings_path = 'ml-100k/u.data'
-movies_path = 'ml-100k/u.item'
-users_path = 'ml-100k/u.user'
+ratings_path = 'Movie_recommender/ml-100k/u.data'
+movies_path = 'Movie_recommender/ml-100k/u.item'
+users_path = 'Movie_recommender/ml-100k/u.user'
 
 # Gatunki (kolejność alfabetyczna)
 genres = ['unknown','Action','Adventure','Animation','Children','Comedy','Crime','Documentary',
